@@ -18,31 +18,38 @@
  * Boston, MA 02110-1301, USA.
  */
 
-
 #ifndef INCLUDED_SPECEST_ESPRIT_VCF_H
 #define INCLUDED_SPECEST_ESPRIT_VCF_H
 
-#include <specest/api.h>
 #include <gnuradio/sync_block.h>
+#include <specest/api.h>
 
 namespace gr {
-  namespace specest {
+namespace specest {
+
+/*! ESPRIT Parametric Spectrum Estimator
+ *
+ * This block will consume \p nsamples as a vector, and will then output \p
+ * omega values as estimates.
+ *
+ * Note: This is a wrapper around the ZESPRIT() function.
+ *
+ * \ingroup specest
+ */
+class SPECEST_API esprit_vcf : virtual public gr::sync_block
+{
+public:
+    typedef boost::shared_ptr<esprit_vcf> sptr;
 
     /*!
-     * \brief ESPRIT
-     * \ingroup specest
-     *
+     * \param n Number of sinusoids to be modeled
+     * \param m Dimensionality of covariance matrix R
+     * \param nsamples Number of samples per estimate
      */
-    class SPECEST_API esprit_vcf : virtual public gr::sync_block
-    {
-     public:
-      typedef boost::shared_ptr<esprit_vcf> sptr;
+    static sptr make(unsigned int n, unsigned int m, unsigned int nsamples);
+};
 
-      static sptr make(unsigned int n, unsigned int m, unsigned int nsamples);
-    };
-
-  } // namespace specest
+} // namespace specest
 } // namespace gr
 
 #endif /* INCLUDED_SPECEST_ESPRIT_VCF_H */
-

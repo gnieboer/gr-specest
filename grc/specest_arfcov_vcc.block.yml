@@ -1,0 +1,34 @@
+id: specest_arfcov_vcc
+label: AR-Model (fcov) Coefficients Generator
+category: Spectrum Estimation
+
+parameters:
+-   id: blocklen
+    label: Blocklen
+    dtype: int
+    default: 256
+-   id: order
+    label: Order
+    dtype: int
+-   id: normalise
+    label: Normalisation Factor
+    dtype: int
+    default: -1
+
+inputs:
+-   domain: stream
+    dtype: complex
+    vlen: ${ blocklen }
+
+outputs:
+-   domain: stream
+    dtype: complex
+    vlen: ${ order+1 }
+-   domain: stream
+    dtype: float
+
+templates:
+    imports: import specest
+    make: specest.arfcov_vcc(${blocklen}, ${order}, ${normalise})
+
+file_format: 1

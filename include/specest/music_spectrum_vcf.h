@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2014 Communications Engineering Lab, KIT
+ * Copyright 2014,2019 Communications Engineering Lab, KIT
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,35 +22,37 @@
 #ifndef INCLUDED_SPECEST_MUSIC_SPECTRUM_VCF_H
 #define INCLUDED_SPECEST_MUSIC_SPECTRUM_VCF_H
 
-#include <specest/api.h>
 #include <gnuradio/sync_block.h>
+#include <specest/api.h>
 
 namespace gr {
-  namespace specest {
+namespace specest {
+
+/*! Calculate pseudospectrum from vectors of samples
+ *
+ * Consumes a vector of length \p nsamples to produce a vector of length
+ * \p pspectrum_len.
+ */
+class SPECEST_API music_spectrum_vcf : virtual public gr::sync_block
+{
+public:
+    typedef boost::shared_ptr<music_spectrum_vcf> sptr;
 
     /*!
-     * \brief
-     * \ingroup specest
-     *
+     * \param n How many sinusoids does your model have?
+     * \param m use a correlation matrix of dimension m x m
+     * \param nsamples use \p nsamples to get an estimate of the correlation matrix
+     * \param pspectrum_len length of the generated pseudospectrum
+     * \param decimation process only one in \p decimation vectors of length \p nsamples.
+     *                   Can be used to win some time for calculations.
      */
-    class SPECEST_API music_spectrum_vcf : virtual public gr::sync_block
-    {
-     public:
-      typedef boost::shared_ptr<music_spectrum_vcf> sptr;
+    static sptr make(unsigned int n,
+                     unsigned int m,
+                     unsigned int nsamples,
+                     unsigned int pspectrum_len);
+};
 
-      /*!
-       * \brief Return a shared_ptr to a new instance of specest::music_spectrum_vcf.
-       *
-       * To avoid accidental use of raw pointers, specest::music_spectrum_vcf's
-       * constructor is in a private implementation
-       * class. specest::music_spectrum_vcf::make is the public interface for
-       * creating new instances.
-       */
-      static sptr make(unsigned int n, unsigned int m, unsigned int nsamples, unsigned int pspectrum_len);
-    };
-
-  } // namespace specest
+} // namespace specest
 } // namespace gr
 
 #endif /* INCLUDED_SPECEST_MUSIC_SPECTRUM_VCF_H */
-

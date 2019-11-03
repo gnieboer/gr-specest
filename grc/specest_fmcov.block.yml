@@ -1,0 +1,41 @@
+id: specest_fmcov
+label: Fast-Modified Covariance PSD Estimator
+category: Spectrum Estimation
+
+parameters:
+-   id: block_len
+    label: Block Length
+    dtype: int
+    default: 256
+-   id: fft_len
+    label: FFT Length
+    dtype: int
+    default: 256
+-   id: order
+    label: Order
+    dtype: int
+    default: 12
+-   id: fftshift
+    label: FFT Shift
+    dtype: raw
+    default: False
+-   id: decimation
+    label: Decimation
+    dtype: int
+    default: 1
+    hide: ${ 'part' if decimation == 1 else 'none' }
+
+inputs:
+-   domain: stream
+    dtype: complex
+
+outputs:
+-   domain: stream
+    dtype: float
+    vlen: ${ fft_len }
+
+templates:
+    imports: import specest
+    make: specest.fmcov(${block_len}, ${fft_len}, ${order}, ${fftshift}, ${decimation})
+
+file_format: 1
